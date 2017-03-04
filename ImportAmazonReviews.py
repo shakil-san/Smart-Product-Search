@@ -14,6 +14,7 @@ from nltk.sentiment import vader
 #for book in books:
 #    print ('-'*40)
 #    print (book.split('%s/')[1])
+#test
 searchQuestion= "cream for burns"
 searchQueryString= "+".join(searchQuestion.split())
 
