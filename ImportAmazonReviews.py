@@ -15,7 +15,7 @@ from nltk.sentiment import vader
 #    print ('-'*40)
 #    print (book.split('%s/')[1])
 #test
-searchQuestion= "cream for burns"
+searchQuestion= "head scarf"
 searchQueryString= "+".join(searchQuestion.split())
 
 urlsearch= "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=" + searchQueryString +"&rh=i%3Aaps%2Ck%3A" + searchQueryString
@@ -23,7 +23,7 @@ print (urlsearch)
 req = urllib.request.Request(urlsearch)
 req.add_header('User-Agent','Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11')
 response = urllib.request.urlopen(req)
-
+import re
 soup=BeautifulSoup(response)
 for a in soup.find_all('a',{"class":"a-size-small a-link-normal a-text-normal"}, href=True):
     #print ("Found the URL:", a['href'])
@@ -31,8 +31,52 @@ for a in soup.find_all('a',{"class":"a-size-small a-link-normal a-text-normal"},
     if "/dp" in urlProduct and "http" in urlProduct:
         urlReviews = a['href'].replace("/dp/","/product-review/").split("/ref",1)[0]
         #urlReviews=a['href'].split("/dp/")[0]
-        urlReviews+="/ref=cm_cr_arp_d_paging_btm_2?pageNumber=1"
-        print(urlReviews)
+        urlReviews += "/ref=cm_cr_arp_d_paging_btm_2?pageNumber="
+        for x in range(1, 1000):
+
+            req = urllib.request.Request(urlReviews + str(x))
+            req.add_header('User-Agent', 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11')
+            response = urllib.request.urlopen(req)
+            soup = BeautifulSoup(response)
+            noReviewsDiv = soup.find_all("div", {"id": "cm_cr-review_list"})
+            #columns = soup.findAll('div', {"id": "cm_cr-review_list"}, text=re.compile('Sorry, no reviews match your current selections'))
+            #columns = soup.findAll('div', {"id": "cm_cr-review_list"}, text='Sorry, no reviews match your current selections')
+            if len(noReviewsDiv) == 1 and noReviewsDiv[0].text=="Sorry, no reviews match your current selections.Try clearing or changing some filters.Show all reviews":
+                break;
+            else:
+                print(urlReviews + str(x))
+
+                #url = 'https://www.amazon.com/AmazonBasics-13-3-Inch-Laptop-Sleeve-Black/product-reviews/B00CD8AF48/ref=cm_cr_dp_d_acr_sr?ie=UTF8&reviewerType=avp_only_reviews'
+
+                req = urllib.request.Request(urlReviews + str(x))
+                req.add_header('User-Agent', 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11')
+                response = urllib.request.urlopen(req)
+
+                # print (response.read())
+                soup = BeautifulSoup(response)
+
+                mydivs = soup.find_all("span", {"class": "a-size-base review-text"})
+                sia = vader.SentimentIntensityAnalyzer()
+                # posts=[]
+                for div in mydivs:
+                    # posts+= map(lambda p: p.text.encode("ascii", errors="replace").replace(b"?",b" ").decode("utf-8"), div.findAll("li"))
+                    print(div.text)
+                    ps = sia.polarity_scores(div.text)
+                    print(ps)
+                    print('-' * 40)
+
+                    #print(urlReviews + str(x))
+            #print(len(testdiv))
+            #for div in testdiv:
+            #    print (div.text)
+            #if soup.find_all("span",{"class":"a-size-medium"}) !=[]:
+            #    break;
+
+            #print(soup.find_all("span", string="Sorry"))lw
+
+
+
+        #print(urlReviews)
         #urlReviews= "https://www.amazon.com/Water-Jel-First-Relief-count/product-reviews/B0006GE5N6/ref=cm_cr_arp_d_paging_btm_2?pageNumber=1"
 
 #mydivs =soup.find_all("div",{"class":"a-row"})
@@ -41,24 +85,6 @@ for a in soup.find_all('a',{"class":"a-size-small a-link-normal a-text-normal"},
 #    print (div.text)
 
 exit(0)
-
-url =  'https://www.amazon.com/AmazonBasics-13-3-Inch-Laptop-Sleeve-Black/product-reviews/B00CD8AF48/ref=cm_cr_dp_d_acr_sr?ie=UTF8&reviewerType=avp_only_reviews'
-
-req = urllib.request.Request(url)
-req.add_header('User-Agent','Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11')
-response = urllib.request.urlopen(req)
-
-#print (response.read())
-soup=BeautifulSoup(response)
-
-mydivs =soup.find_all("span",{"class":"a-size-base review-text"})
-sia=vader.SentimentIntensityAnalyzer()
- #posts=[]
-for div in mydivs:
-        #posts+= map(lambda p: p.text.encode("ascii", errors="replace").replace(b"?",b" ").decode("utf-8"), div.findAll("li"))
-    print (div.text)
-    ps=sia.polarity_scores(div.text)
-    print(ps)
 
 #for country in countries:
 #    asin=book.split('/')[-1]; title=book.split('/')[3]
@@ -69,4 +95,4 @@ for div in mydivs:
         ##f = urllib2.urlopen(url)
   #  print (response.read())
     ##page=response.read().lower(); print ('%s=%s'%(country, page.count('member-review')))
-print ('-'*40)
+
