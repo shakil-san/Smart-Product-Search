@@ -47,7 +47,6 @@ class ImportAmazonReviews:
         soup = BeautifulSoup(response)
 
         for a in soup.find_all('a', {"class": "a-size-small a-link-normal a-text-normal"}, href=True):
-            # print ("Found the URL:", a['href'])
             urlProduct = a['href']
             if "/dp" in urlProduct and "http" in urlProduct:
                 urlReviews = a['href'].replace("/dp/", "/product-review/").split("/ref", 1)[0]
