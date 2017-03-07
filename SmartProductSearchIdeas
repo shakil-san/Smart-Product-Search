@@ -1,0 +1,44 @@
+user comes to the website and does a natural language search
+"what is the best cream for kids second degree burns"
+the program breaks the quesion in words using nlp and identifies the actual words that needs to be searched
+e.g. cream for burns
+then program searches on amazon based on this search text.
+
+Once relevent search is returned, program opens first 5 links and opens reviews for each product
+
+for each product it fetches all the reviews with below data
+   reviewer name
+   reviewer rating
+   review text
+   review date
+
+it processes all abobve data for each review and provides below output
+
+per product
+   how many +ve reviews
+   how many 5 start reviews
+   how many 1 star reviewes
+   General sentiment of reviewers??
+   How many reviewers have used the product for relevent reasons. e.g. in this case burn
+   how many of above ar +ve and -ve (sentiments)
+   Highlight top 5 +ve with relevent reason
+   Highligh op 5 negative with relevent reason
+   Using nlp idenitfy why few top reviewes think its positive or negagtive
+
+get reviews from other regions for wholistic view
+create summary of each product based on product info and reviews
+look for fake reviews and provide info about it ...how?
+look for high ratings with high votes
+look for low ratings with high votes
+provide recommendation based on number of products
+look into comments to each review for more details
+look for helpfulness votes
+look for positive or negative reviewes based on recency
+look for price change over period of time
+use regular expression to identify important information based on question asked
+using nlp decode question asked
+Create categorization based on product type with what users are saying about each category similar to Bestbuy
+Depending upon what is the general number of reviewes for each product provide recommendation
+
+Search similar product from other sites like best buy or walmart
+
