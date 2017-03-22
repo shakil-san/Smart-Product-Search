@@ -1,8 +1,5 @@
-import ImportAmazonReviews
-import GenericStanfordParser
+from ImportAmazonReviews import ImportAmazonReviews
 
-
-#x=ImportAmazonReviews()
-#x.SearchAmazon("Samsung Galaxy S7")
-
-y=GenericStanfordParser()
+x = ImportAmazonReviews()
+assert isinstance(x.SearchAmazon, object)
+x.SearchAmazon("Plant based protein powder")

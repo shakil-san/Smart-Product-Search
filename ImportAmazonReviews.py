@@ -88,7 +88,7 @@ class ImportAmazonReviews:
 
 
 
-x=ImportAmazonReviews()
-x.SearchAmazon("Samsung Galaxy S7")
+#x=ImportAmazonReviews()
+#x.SearchAmazon("Plant based protein powder")
 
 
